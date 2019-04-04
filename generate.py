@@ -1,16 +1,19 @@
-from datetime import datetime
-import sys, os
-
+import os
 class myevent():
+	from datetime import datetime, timedelta
+	t = datetime.now()
+	dtstamp = t.strftime('%Y%m%dT%H%M%SZ')
+	uu = int(t.strftime('%Y%j%H%M%S'))
 	def __init__(self, text_line, year):
-		from datetime import datetime, timedelta
 		z = text_line.split(' : ')
 		x = z[0].split('-')
-		date = datetime(int(year), int(x[0]), int(x[1]))
+		date = myevent.datetime(int(year), int(x[0]), int(x[1]))
 		self.name = z[1]
 		self.datestart = date.strftime('%Y%m%d')
-		self.dateend = (date + timedelta(1)).strftime('%Y%m%d')
-
+		self.dateend = (date + myevent.timedelta(1)).strftime('%Y%m%d')
+		self.uid = "%s@github.com/shajilkrazy"%(hex(self.uu)[2:])
+		myevent.uu += 1		
+		
 def txt_process(file_name, year):
 	f = open(file_name)
 	s = f.read()
@@ -25,20 +28,20 @@ def txt_process(file_name, year):
 	return events_list
 
 def year_process(file_name):
-	dtstamp = datetime.now().strftime('%Y%m%dT%H%M%SZ')
 	year = os.path.splitext(os.path.basename(file_name))[0]
-	spec_events = txt_process(file_name, year)
 	common_events = txt_process('data/common',year)
+	spec_events = txt_process(file_name, year)
 	yearly_events = common_events + spec_events
-	f = open("Malayalam Holidays-%s.ics"%(year),'w')
-	f.write("BEGIN:VCALENDAR\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:Malayalam Holidays\nX-WR-TIMEZONE:Asia/Kolkata\nBEGIN:VTIMEZONE\nTZID:Asia/Kolkata\nX-LIC-LOCATION:Asia/Kolkata\nBEGIN:STANDARD\nTZOFFSETFROM:+0530\nTZOFFSETTO:+0530\nTZNAME:IST\nDTSTART:19700101T000000\nEND:STANDARD\nEND:VTIMEZONE")
+	f = open("Malayalam_Holidays_%s.ics"%(year),'w')
+	f.write("BEGIN:VCALENDAR\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nPRODID:-//Malayalam//Holidays//EN\nX-WR-CALNAME:Malayalam Holidays\nX-WR-TIMEZONE:Asia/Kolkata\nBEGIN:VTIMEZONE\nTZID:Asia/Kolkata\nX-LIC-LOCATION:Asia/Kolkata\nBEGIN:STANDARD\nTZOFFSETFROM:+0530\nTZOFFSETTO:+0530\nTZNAME:IST\nDTSTART:19700101T000000\nEND:STANDARD\nEND:VTIMEZONE")
 	for event in yearly_events:
-		f.write("\nBEGIN:VEVENT\nDTSTART;VALUE=DATE:%s\nDTEND;VALUE=DATE:%s\nDTSTAMP:%s\nSUMMARY:%s\nEND:VEVENT"%(event.datestart, event.dateend, dtstamp, event.name))
+		f.write("\nBEGIN:VEVENT\nDTSTART;VALUE=DATE:%s\nDTEND;VALUE=DATE:%s\nDTSTAMP:%s\nSUMMARY:%s\nUID:%s\nEND:VEVENT"%(event.datestart, event.dateend, event.dtstamp, event.name,event.uid))
 	f.write("\nEND:VCALENDAR")
 	f.close()
 
 def main():
 	try:
+		import sys
 		years = []
 		for year in sys.argv[1:]:
 			years.append(int(year))
