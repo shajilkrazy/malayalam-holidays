@@ -33,7 +33,7 @@ def year_process(file_name):
 	spec_events = txt_process(file_name, year)
 	yearly_events = common_events + spec_events
 	f = open("Malayalam_Holidays_%s.ics"%(year),'w')
-	f.write("BEGIN:VCALENDAR\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nPRODID:-//Malayalam//Holidays//EN\nX-WR-CALNAME:Malayalam Holidays\nX-WR-TIMEZONE:Asia/Kolkata\nBEGIN:VTIMEZONE\nTZID:Asia/Kolkata\nX-LIC-LOCATION:Asia/Kolkata\nBEGIN:STANDARD\nTZOFFSETFROM:+0530\nTZOFFSETTO:+0530\nTZNAME:IST\nDTSTART:19700101T000000\nEND:STANDARD\nEND:VTIMEZONE")
+	f.write("BEGIN:VCALENDAR\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nPRODID:-//Malayalam//Holidays//ML\nX-WR-CALNAME:Malayalam Holidays\nX-WR-TIMEZONE:Asia/Kolkata\nBEGIN:VTIMEZONE\nTZID:Asia/Kolkata\nX-LIC-LOCATION:Asia/Kolkata\nBEGIN:STANDARD\nTZOFFSETFROM:+0530\nTZOFFSETTO:+0530\nTZNAME:IST\nDTSTART:19700101T000000\nEND:STANDARD\nEND:VTIMEZONE")
 	for event in yearly_events:
 		f.write("\nBEGIN:VEVENT\nDTSTART;VALUE=DATE:%s\nDTEND;VALUE=DATE:%s\nDTSTAMP:%s\nSUMMARY:%s\nUID:%s\nEND:VEVENT"%(event.datestart, event.dateend, event.dtstamp, event.name,event.uid))
 	f.write("\nEND:VCALENDAR")
