@@ -19,7 +19,7 @@ For specific language,
 python generate.py -y 2021 -l eng
 ```
 
-![Ouput](screens/output.png)
+![Ouput](screens/output_sidebyside.png)
 
 Sometimes you may want to use _python3_ instead of _python_ according to your operating system.
 _years_ are optional arguments. If no years are given as arguments, all the available calendars are generated.
